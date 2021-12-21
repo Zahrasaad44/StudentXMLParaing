@@ -22,7 +22,7 @@ class StudentXMLPullParserHandler {
             parser.setInput(inputStream, null)
             var eventType = parser.eventType
 
-            while (eventType != XmlPullParser.END_DOCUMENT) {
+            while (eventType != XmlPullParser.END_DOCUMENT) { //To take the content of XML document (before the end of the document)
                 val tagName = parser.name
 
                 when(eventType) {
@@ -31,13 +31,14 @@ class StudentXMLPullParserHandler {
                     XmlPullParser.END_TAG -> when {
                         tagName.equals("name", ignoreCase = true) -> {
                             studentName = text!!.toString()
-                        }
+                        } // "name", "grade" are the names of the tags we want to get
                         tagName.equals("grade", ignoreCase = true) -> {
                             studentGrade = text!!.toFloat()
+                            students.add(Student(studentName,studentGrade))
                         }
-                        else -> students.add(Student(studentName,studentGrade))
-                    } // SOMETHING I DIDN'T UNDERSTAND: when I comment these two "else"s, I get nothing in the RV
-                    else -> {
+                        //else -> students.add(Student(studentName,studentGrade)) //This line will add even the default value we give to "studentName", "studentGrade"
+                    }
+                    else -> {  // NOTE: didn't understand why to do this
                     }
                 }
                 eventType = parser.next()
